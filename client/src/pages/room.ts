@@ -61,6 +61,8 @@ async function init() {
 
   // ---- DOM refs ----
   document.getElementById('room-id-display')!.textContent = roomId;
+  const ftLink = document.getElementById('ft-link') as HTMLAnchorElement | null;
+  if (ftLink) ftLink.href = `/filetransfer?roomId=${encodeURIComponent(roomId)}&name=${encodeURIComponent(name)}`;
   const statusEl = document.getElementById('connection-status')!;
   const statusDot = document.getElementById('status-dot')!;
   const swapBadgeWrap = document.getElementById('swap-badge-wrap')!;

@@ -45,6 +45,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'room.participants': 'Katılımcılar',
     'room.permissions': 'İzinler',
     'room.session_notes': 'Oturum Notları',
+    'room.file_transfer': 'Dosya Aktar',
+    'room.btn.open_ft': 'Dosya Aktarım Sayfası',
     'room.placeholder_host': '"Ekranı Paylaş"ı tıklayarak başlayın.',
     'room.placeholder_viewer': 'Host ekranını paylaşana kadar bekleyin...',
     // Toast'lar
@@ -187,6 +189,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     'room.participants': 'Participants',
     'room.permissions': 'Permissions',
     'room.session_notes': 'Session Notes',
+    'room.file_transfer': 'File Transfer',
+    'room.btn.open_ft': 'File Transfer Page',
     'room.placeholder_host': 'Click "Share Screen" to start.',
     'room.placeholder_viewer': 'Waiting for host to share their screen...',
     // Toasts
