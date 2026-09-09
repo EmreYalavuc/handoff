@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
+  <defs>
+    <!-- Kurumsal Mat/Canlı Mavi Gradyanı -->
+    <linearGradient id="handoffHeadsetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#244C70" />
+      <stop offset="100%" stop-color="#4F83B8" />
+    </linearGradient>
+    
+    <!-- Hafif Derinlik Gölgesi -->
+    <filter id="headsetShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1F2937" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Dairesel Arka Plan -->
+  <circle cx="30" cy="30" r="28" fill="url(#handoffHeadsetGrad)" filter="url(#headsetShadow)" />
+  
+  <!-- Şık İç Çember Çerçevesi -->
+  <circle cx="30" cy="30" r="25" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.25" />
+
+  <!-- Kulak Üstü Kulaklık ve Akış Grubu -->
+  <g transform="translate(14, 13)">
+    <!-- Kulaklık Tacı (Headband) -->
+    <path d="M 6 16 A 11 11 0 0 1 26 16" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Sol Kulaklık Yastığı -->
+    <rect x="3" y="14" width="5" height="10" rx="2.5" fill="#EAF2F9" />
+    
+    <!-- Sağ Kulaklık Yastığı -->
+    <rect x="24" y="14" width="5" height="10" rx="2.5" fill="#EAF2F9" />
+
+    <!-- Bağlantı / Transfer Işını (Kulaklıklar Arası Veri Köprüsü) -->
+    <path d="M 8 10 C 13 6, 19 6, 24 10" fill="none" stroke="#EAF2F9" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2" opacity="0.8" />
+
+    <!-- Mikrofon Kolu ve Veri Akışı (Mikrofon Ucundan Dışarı Akan Veri/Sinyal Noktaları) -->
+    <!-- Mikrofon Kolu -->
+    <path d="M 26.5 22 C 26.5 25, 22 27, 18 27" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+    
+    <!-- Akıp Giden Veri Sinyalleri (Noktalar) -->
+    <circle cx="13" cy="27" r="1.5" fill="#EAF2F9" />
+    <circle cx="9" cy="27" r="1.2" fill="#EAF2F9" opacity="0.7" />
+    <circle cx="5" cy="27" r="0.9" fill="#EAF2F9" opacity="0.4" />
+  </g>
+</svg>

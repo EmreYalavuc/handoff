@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handoff — Room</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <div class="room-page">
+
+    <!-- Top bar -->
+    <header class="room-topbar">
+      <div class="topbar-logo">
+        <img src="/logo.svg" width="26" height="26" alt="Handoff" />
+        Handoff
+      </div>
+
+      <div class="topbar-room-id">
+        <span data-i18n="room.room_prefix">Oda:</span> <strong id="room-id-display">———</strong>
+      </div>
+
+      <div id="rec-indicator-wrap"></div>
+      <div id="stats-strip-wrap" class="topbar-stats"></div>
+      <div id="swap-badge-wrap"></div>
+
+      <div class="topbar-spacer"></div>
+
+      <div class="topbar-actions">
+        <button id="chat-toggle-btn" class="btn btn--ghost btn--sm" title="Toggle Chat">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="room.chat">Sohbet</span>
+          <span id="chat-unread-badge" class="chat-unread-badge" hidden></span>
+        </button>
+      </div>
+
+      <div class="topbar-status">
+        <span id="status-dot" class="status-dot status-dot--connecting"></span>
+        <span id="connection-status" data-i18n="room.connecting">Bağlanıyor...</span>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="room-sidebar">
+      <div id="agent-banner-wrap"></div>
+
+      <div class="sidebar-section-title" data-i18n="room.participants">Katılımcılar</div>
+      <div id="user-list"></div>
+
+      <div id="perm-section" hidden>
+        <div class="sidebar-section-title sidebar-section-title--mt" data-i18n="room.permissions">İzinler</div>
+        <div id="perm-panel"></div>
+      </div>
+
+      <div id="notes-section" hidden>
+        <div class="sidebar-section-title sidebar-section-title--mt" data-i18n="room.session_notes">Oturum Notları</div>
+        <div id="session-notes"></div>
+      </div>
+    </aside>
+
+    <!-- Main video area -->
+    <main class="room-main">
+      <div id="video-container"></div>
+      <div id="file-transfer-wrap"></div>
+      <div id="chat-panel"></div>
+    </main>
+
+    <!-- Control bar -->
+    <footer class="room-controlbar">
+      <div id="control-bar"></div>
+    </footer>
+
+  </div>
+
+  <script type="module" src="/src/pages/room.ts"></script>
+</body>
+</html>

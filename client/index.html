@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handoff</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <div class="home-page">
+
+    <!-- Mode selector -->
+    <div class="home-mode-tabs">
+      <button class="home-mode-tab home-mode-tab--active" data-mode="screen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <span data-i18n="home.tab_screen">Ekran Paylaşımı / Uzak Destek</span>
+      </button>
+      <button class="home-mode-tab" data-mode="filetransfer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        <span data-i18n="home.tab_filetransfer">Dosya Aktarımı</span>
+      </button>
+    </div>
+
+    <!-- Screen Sharing panel -->
+    <div class="home-card" id="home-panel-screen">
+      <div class="home-logo">
+        <img src="/logo.svg" width="44" height="44" alt="Handoff" style="flex-shrink:0" />
+        <div>
+          <div class="home-logo-text" data-i18n="app.name">Handoff</div>
+          <div class="home-logo-sub" data-i18n="home.subtitle_screen">Uzak destek &amp; ekran paylaşımı</div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="name-input" data-i18n="home.your_name">Adınız</label>
+        <input
+          id="name-input"
+          class="form-input"
+          type="text"
+          data-i18n-placeholder="home.name_placeholder"
+          placeholder="Emre"
+          maxlength="32"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="room-id-input">
+          <span data-i18n="home.room_id">Oda Kodu</span>
+          <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0">
+            &nbsp;<span data-i18n="home.room_id_hint">(oluşturmak için boş bırakın)</span>
+          </span>
+        </label>
+        <input
+          id="room-id-input"
+          class="form-input mono"
+          type="text"
+          placeholder="XXX-XXX-XXX"
+          maxlength="11"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <div id="error-msg" class="error-msg"></div>
+
+      <div class="divider" data-i18n="home.or">veya</div>
+
+      <div class="btn-row">
+        <button id="host-btn" class="btn btn--primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+          <span data-i18n="home.host_session">Oturumu Başlat</span>
+        </button>
+        <button id="join-btn" class="btn btn--secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          <span data-i18n="home.join_session">Oturuma Katıl</span>
+        </button>
+      </div>
+
+      <!-- Quick Support -->
+      <div class="quick-support-section">
+        <div class="quick-support-title" data-i18n="home.quick_support">Hızlı Destek</div>
+        <div class="form-field" style="margin-bottom:10px">
+          <input
+            id="quick-code-input"
+            class="form-input quick-code-input"
+            type="text"
+            placeholder="000 000"
+            maxlength="7"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <button id="quick-join-btn" class="btn btn--secondary" style="width:100%;justify-content:center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.47 2 2 0 0 1 3.55 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span data-i18n="home.connect_with_code">Kodla Bağlan</span>
+        </button>
+        <div id="quick-error-msg" class="error-msg"></div>
+      </div>
+    </div><!-- /home-panel-screen -->
+
+    <!-- File Transfer panel -->
+    <div class="home-card" id="home-panel-filetransfer" hidden>
+      <div class="home-logo">
+        <img src="/logo.svg" width="44" height="44" alt="Handoff" style="flex-shrink:0" />
+        <div>
+          <div class="home-logo-text" data-i18n="home.tab_filetransfer">Dosya Aktarımı</div>
+          <div class="home-logo-sub" data-i18n="home.ft_subtitle">P2P doğrudan dosya paylaşımı</div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="ft-name-input" data-i18n="home.your_name">Adınız</label>
+        <input id="ft-name-input" class="form-input" type="text" data-i18n-placeholder="home.name_placeholder" placeholder="Emre" maxlength="32" autocomplete="off" />
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="ft-room-id-input">
+          <span data-i18n="home.room_id">Oda Kodu</span>
+          <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0">
+            &nbsp;<span data-i18n="home.room_id_hint">(oluşturmak için boş bırakın)</span>
+          </span>
+        </label>
+        <input id="ft-room-id-input" class="form-input mono" type="text" placeholder="XXX-XXX-XXX" maxlength="11" autocomplete="off" spellcheck="false" />
+      </div>
+
+      <div id="ft-error-msg" class="error-msg"></div>
+
+      <div class="btn-row">
+        <button id="ft-create-btn" class="btn btn--primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+          <span data-i18n="home.create_room">Oda Oluştur</span>
+        </button>
+        <button id="ft-join-btn" class="btn btn--secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span data-i18n="home.join_room">Odaya Katıl</span>
+        </button>
+      </div>
+    </div><!-- /home-panel-filetransfer -->
+
+  </div><!-- /home-page -->
+
+  <footer style="text-align:center;padding:18px 0 14px;font-size:11px;color:#2a2f40;letter-spacing:0.03em">
+    designed by <span style="color:#4a5068">emre yalavuç</span>
+  </footer>
+
+  <script type="module" src="/src/pages/home.ts"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
+  <defs>
+    <!-- Kurumsal Mat/Canlı Mavi Gradyanı -->
+    <linearGradient id="handoffCircleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#244C70" />
+      <stop offset="100%" stop-color="#4F83B8" />
+    </linearGradient>
+    
+    <!-- İç Gölge/Derinlik Efekti -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1F2937" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Yuvarlak Arka Plan -->
+  <circle cx="30" cy="30" r="28" fill="url(#handoffCircleGrad)" filter="url(#shadow)" />
+  
+  <!-- İnce Şık İç Çember Çerçevesi -->
+  <circle cx="30" cy="30" r="25" fill="none" stroke="#FFFFFF" stroke-width="0.75" stroke-opacity="0.3" />
+
+  <!-- Yuvarlak İçindeki Handoff / Transfer Sembolü (Minimalist Oklar ve Cihaz Geçişi) -->
+  <g transform="translate(15, 15) scale(1.25)">
+    <!-- Sol/Kaynak Nokta -->
+    <circle cx="6" cy="12" r="3" fill="#FFFFFF" />
+    
+    <!-- Sağ/Hedef Nokta -->
+    <circle cx="18" cy="12" r="3" fill="#EAF2F9" />
+    
+    <!-- Akış / El Değiştirme Eğrisi (Handoff Arkı) -->
+    <path d="M 6 9 C 9 3, 15 3, 18 9" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
+    
+    <!-- Geri Dönüş / Senkronizasyon Ok Ucu -->
+    <path d="M 15 15 C 12 21, 9 21, 6 15" fill="none" stroke="#EAF2F9" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1.5 3" />
+  </g>
+</svg>

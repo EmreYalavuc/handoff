@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handoff — Dosya Aktarımı</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body class="ft-body">
+
+  <!-- ─── Top bar ─── -->
+  <header class="ft-topbar">
+    <div class="ft-topbar-left">
+      <div class="ft-logo">
+        <img src="/logo.svg" width="22" height="22" alt="Handoff" style="flex-shrink:0" />
+        <span style="font-weight:700;color:var(--text-primary)">Handoff</span>
+        <span style="color:var(--text-muted);font-weight:400">·</span>
+        <span data-i18n="home.tab_filetransfer">Dosya Aktarımı</span>
+      </div>
+      <span class="ft-room-badge mono" id="ft-room-id">—</span>
+      <button class="btn btn--ghost btn--sm" id="ft-copy-room-btn" title="Copy Room ID">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+    <div class="ft-topbar-center">
+      <div class="ft-net-stat" id="ft-net-stat">
+        <span id="ft-ul-speed">↑ 0 B/s</span>
+        <span id="ft-dl-speed">↓ 0 B/s</span>
+        <span class="ft-transport-badge" id="ft-transport">—</span>
+      </div>
+    </div>
+    <div class="ft-topbar-right">
+      <div class="ft-users-count" id="ft-users-count">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span id="ft-user-count-num">1</span>
+      </div>
+      <button class="btn btn--ghost btn--sm" id="ft-leave-btn" data-i18n="ft.leave">Çık</button>
+    </div>
+  </header>
+
+  <!-- ─── Main 3-panel layout ─── -->
+  <div class="ft-main">
+
+    <!-- Left sidebar: folders + members -->
+    <aside class="ft-sidebar">
+      <div class="ft-sidebar-section">
+        <div class="ft-sidebar-title">
+          <span data-i18n="ft.folders">Klasörler</span>
+          <button class="ft-icon-btn" id="ft-new-folder-btn" title="New Folder">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+          </button>
+        </div>
+        <nav class="ft-folder-tree" id="ft-folder-tree">
+          <div class="ft-folder-item ft-folder-item--active" data-folder-id="root">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span data-i18n="ft.all_files">Tüm Dosyalar</span>
+          </div>
+        </nav>
+      </div>
+
+      <div class="ft-sidebar-section ft-sidebar-section--grow">
+        <div class="ft-sidebar-title" data-i18n="ft.members">Üyeler</div>
+        <ul class="ft-member-list" id="ft-member-list"></ul>
+      </div>
+    </aside>
+
+    <!-- Center: file explorer -->
+    <main class="ft-files-panel">
+      <div class="ft-files-toolbar">
+        <div class="ft-breadcrumb" id="ft-breadcrumb" data-i18n="ft.all_files">Tüm Dosyalar</div>
+        <div class="ft-toolbar-actions">
+          <button class="btn btn--secondary btn--sm" id="ft-upload-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span data-i18n="ft.share_files">Dosya Paylaş</span>
+          </button>
+          <button class="btn btn--secondary btn--sm" id="ft-upload-folder-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span data-i18n="ft.share_folder">Klasör Paylaş</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Column headers -->
+      <div class="ft-file-cols ft-file-header">
+        <span class="ft-col-name"  data-i18n="ft.col_name">Ad</span>
+        <span class="ft-col-size"  data-i18n="ft.col_size">Boyut</span>
+        <span class="ft-col-type"  data-i18n="ft.col_type">Tür</span>
+        <span class="ft-col-date"  data-i18n="ft.col_date">Değiştirilme</span>
+        <span class="ft-col-owner" data-i18n="ft.col_owner">Sahip</span>
+        <span class="ft-col-action"></span>
+      </div>
+
+      <!-- File list (populated by JS) -->
+      <div class="ft-file-list" id="ft-file-list">
+        <div class="ft-empty-state" id="ft-empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+          <p><span data-i18n="ft.empty_line1">Henüz dosya paylaşılmadı.</span><br><span data-i18n="ft.empty_line2">"Dosya Paylaş"a tıklayın veya sürükleyip bırakın.</span></p>
+        </div>
+      </div>
+
+      <!-- Drop zone overlay -->
+      <div class="ft-drop-overlay" id="ft-drop-overlay">
+        <div class="ft-drop-message">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span data-i18n="ft.drop_message">Paylaşmak için dosyaları bırakın</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right: file detail panel -->
+    <aside class="ft-detail-panel" id="ft-detail-panel">
+      <div class="ft-detail-empty" id="ft-detail-empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        <p data-i18n="ft.detail_empty">Ayrıntıları görmek için dosya seçin</p>
+      </div>
+      <div class="ft-detail-content" id="ft-detail-content" hidden>
+        <div class="ft-detail-icon" id="ft-detail-icon">📄</div>
+        <div class="ft-detail-name" id="ft-detail-name"></div>
+        <table class="ft-detail-table" id="ft-detail-table"></table>
+        <div class="ft-detail-actions" id="ft-detail-actions"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ─── Bottom: Transfer Manager + Speed Controls ─── -->
+  <footer class="ft-footer">
+    <div class="ft-transfers-panel" id="ft-transfers-panel">
+      <div class="ft-transfers-title">
+        <span data-i18n="ft.transfers">Aktarımlar</span>
+        <span class="ft-active-count" id="ft-active-count" hidden></span>
+      </div>
+      <div class="ft-transfer-list" id="ft-transfer-list">
+        <div class="ft-no-transfers" id="ft-no-transfers" data-i18n="ft.no_transfers">Aktif aktarım yok</div>
+      </div>
+    </div>
+
+    <div class="ft-speed-panel">
+      <div class="ft-speed-row">
+        <span class="ft-speed-label" data-i18n="ft.upload_limit">Yükleme limiti</span>
+        <input class="ft-speed-slider" id="ft-ul-limit-slider" type="range" min="0" max="8" step="1" value="0" />
+        <span class="ft-speed-value" id="ft-ul-limit-label" data-i18n="ft.unlimited">Limitsiz</span>
+      </div>
+      <div class="ft-speed-row">
+        <span class="ft-speed-label" data-i18n="ft.download_limit">İndirme limiti</span>
+        <input class="ft-speed-slider" id="ft-dl-limit-slider" type="range" min="0" max="8" step="1" value="0" />
+        <span class="ft-speed-value" id="ft-dl-limit-label" data-i18n="ft.unlimited">Limitsiz</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="ft-file-input" multiple hidden />
+  <input type="file" id="ft-folder-input" multiple hidden />
+
+  <script type="module" src="/src/pages/filetransfer.ts"></script>
+</body>
+</html>

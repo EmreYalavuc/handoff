@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "rewrites": [
+    { "source": "/room", "destination": "/room.html" },
+    { "source": "/filetransfer", "destination": "/filetransfer.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
