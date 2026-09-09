@@ -1651,3 +1651,41 @@ body {
   word-break: break-all;
 }
 
+/* ========================
+   FILE TRANSFER ROOM — 1.45× TEXT SCALE (desktop only)
+   ======================== */
+@media (min-width: 769px) {
+  .ft-logo              { font-size: 19px; }
+  .ft-room-badge        { font-size: 17px; }
+  .ft-net-stat          { font-size: 17px; }
+  .ft-transport-badge   { font-size: 16px; }
+  .ft-users-count       { font-size: 19px; }
+  .ft-sidebar-title     { font-size: 16px; }
+  .ft-folder-item       { font-size: 17px; }
+  .ft-member-item       { font-size: 17px; }
+  .ft-breadcrumb        { font-size: 19px; }
+  .ft-file-header       { font-size: 16px; }
+  .ft-file-row,
+  .ft-folder-row        { font-size: 19px; min-height: 40px; }
+  .ft-col-size,
+  .ft-col-type,
+  .ft-col-date,
+  .ft-col-owner,
+  .ft-col-action        { font-size: 17px; }
+  .ft-empty-state       { font-size: 19px; }
+  .ft-detail-empty      { font-size: 17px; }
+  .ft-detail-icon       { font-size: 52px; }
+  .ft-detail-name       { font-size: 19px; }
+  .ft-detail-table      { font-size: 17px; }
+  .ft-transfers-title   { font-size: 16px; }
+  .ft-active-count      { font-size: 15px; }
+  .ft-no-transfers      { font-size: 17px; }
+  .ft-tc-dir            { font-size: 17px; }
+  .ft-tc-name           { font-size: 17px; }
+  .ft-tc-state          { font-size: 15px; }
+  .ft-tc-meta           { font-size: 16px; }
+  .ft-speed-label       { font-size: 16px; }
+  .ft-speed-value       { font-size: 16px; }
+  .ft-toast             { font-size: 19px; }
+}
+
