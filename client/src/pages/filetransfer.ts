@@ -33,6 +33,11 @@ let myUserId = '';
 let currentFolderId: string | null = null; // null = root
 let selectedFileId: string | null = null;
 
+// ── Media preview modal state ────────────────────────────────────────────────
+let mediaModalTransferId: string | null = null;
+let mediaModalMime: string = '';
+let mediaModalBlobUrl: string | null = null;
+
 // ── Local file server (Desktop Agent) ───────────────────────────────────────
 const LOCAL_FS_PORT = 9002;
 const LOCAL_FS_BASE = `http://localhost:${LOCAL_FS_PORT}`;
@@ -77,6 +82,15 @@ const elFileInput     = document.getElementById('ft-file-input') as HTMLInputEle
 const elFolderInput   = document.getElementById('ft-folder-input') as HTMLInputElement;
 const elUploadBtn     = document.getElementById('ft-upload-btn')!;
 const elUploadFolderBtn = document.getElementById('ft-upload-folder-btn')!;
+const elMediaModal    = document.getElementById('ft-media-modal')!;
+const elMediaModalName = document.getElementById('ft-media-modal-name')!;
+const elMediaModalPct  = document.getElementById('ft-media-modal-pct')!;
+const elMediaModalBody = document.getElementById('ft-media-modal-body')!;
+const elMediaModalRefresh = document.getElementById('ft-media-modal-refresh')!;
+const elMediaModalClose   = document.getElementById('ft-media-modal-close')!;
+document.getElementById('ft-media-modal-backdrop')!.addEventListener('click', closeMediaModal);
+elMediaModalClose.addEventListener('click', closeMediaModal);
+elMediaModalRefresh.addEventListener('click', () => { if (mediaModalTransferId) refreshMediaModal(); });
 const elNewFolderBtn  = document.getElementById('ft-new-folder-btn')!;
 const elUlSlider      = document.getElementById('ft-ul-limit-slider') as HTMLInputElement;
 const elUlLabel       = document.getElementById('ft-ul-limit-label')!;
@@ -472,11 +486,86 @@ async function downloadFile(fileId: string) {
 function onTransferUpdate(ts: TransferState) {
   updateSpeedDisplay();
   renderTransferCard(ts);
+  if (mediaModalTransferId === ts.transferId && ts.direction === 'receive') {
+    const pct = ts.totalChunks > 0 ? Math.round((ts.receivedChunks / ts.totalChunks) * 100) : 0;
+    elMediaModalPct.textContent = `${pct}%`;
+    if (ts.state === 'done') refreshMediaModal();
+  }
 }
 
 function onTransferDone(transferId: string, fileName: string) {
   renderTransfers();
   showToast(`${t('ft.toast.download_done')} ${fileName}`);
+}
+
+function isMediaMime(mime: string): boolean {
+  return mime.startsWith('image/') || mime.startsWith('video/') || mime.startsWith('audio/');
+}
+
+function findPeerAndMime(transferId: string): { peer: PeerTransfer; mimeType: string } | null {
+  for (const pt of peers.values()) {
+    const ts = pt.getTransfer(transferId);
+    if (ts) {
+      const file = state.files.get(ts.fileId);
+      return { peer: pt, mimeType: file?.mimeType ?? '' };
+    }
+  }
+  return null;
+}
+
+function openMediaModal(transferId: string, fileName: string, mimeType: string) {
+  mediaModalTransferId = transferId;
+  mediaModalMime = mimeType;
+  elMediaModalName.textContent = fileName;
+  elMediaModal.hidden = false;
+  refreshMediaModal();
+}
+
+function closeMediaModal() {
+  elMediaModal.hidden = true;
+  mediaModalTransferId = null;
+  elMediaModalBody.innerHTML = '';
+  if (mediaModalBlobUrl) { URL.revokeObjectURL(mediaModalBlobUrl); mediaModalBlobUrl = null; }
+}
+
+function refreshMediaModal() {
+  if (!mediaModalTransferId) return;
+  const found = findPeerAndMime(mediaModalTransferId);
+  const pt = found?.peer;
+  if (!pt) return;
+
+  const ts = pt.getTransfer(mediaModalTransferId);
+  const pct = ts && ts.totalChunks > 0 ? Math.round((ts.receivedChunks / ts.totalChunks) * 100) : 0;
+  elMediaModalPct.textContent = pct ? `${pct}%` : '';
+
+  const blob = pt.getPartialBlob(mediaModalTransferId, mediaModalMime);
+  if (!blob) {
+    elMediaModalBody.innerHTML = `<p class="ft-media-modal-msg">Henüz veri yok veya disk modunda indiriliyor.</p>`;
+    return;
+  }
+
+  if (mediaModalBlobUrl) URL.revokeObjectURL(mediaModalBlobUrl);
+  mediaModalBlobUrl = URL.createObjectURL(blob);
+
+  elMediaModalBody.innerHTML = '';
+  if (mediaModalMime.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = mediaModalBlobUrl;
+    img.className = 'ft-media-img';
+    elMediaModalBody.appendChild(img);
+  } else if (mediaModalMime.startsWith('video/')) {
+    const vid = document.createElement('video');
+    vid.src = mediaModalBlobUrl;
+    vid.className = 'ft-media-video';
+    vid.controls = true;
+    elMediaModalBody.appendChild(vid);
+  } else if (mediaModalMime.startsWith('audio/')) {
+    const aud = document.createElement('audio');
+    aud.src = mediaModalBlobUrl;
+    aud.className = 'ft-media-audio';
+    aud.controls = true;
+    elMediaModalBody.appendChild(aud);
+  }
 }
 
 // ── Transfer manager rendering ────────────────────────────────────────────────
@@ -542,6 +631,7 @@ function renderTransferCard(ts: TransferState) {
     <div class="ft-tc-actions">
       ${ts.state === 'active'  ? `<button class="btn btn--ghost btn--xs" data-action="pause"  data-tid="${ts.transferId}" data-pid="${ts.direction === 'send' ? ts.transferId : findPeerForTransfer(ts.transferId)}">${t('ft.btn.pause')}</button>` : ''}
       ${ts.state === 'paused'  ? `<button class="btn btn--ghost btn--xs" data-action="resume" data-tid="${ts.transferId}" data-pid="${findPeerForTransfer(ts.transferId)}">${t('ft.btn.resume')}</button>` : ''}
+      ${(ts.direction === 'receive' && (() => { const f = state.files.get(ts.fileId); return f && isMediaMime(f.mimeType); })()) ? `<button class="btn btn--ghost btn--xs" data-action="preview" data-tid="${ts.transferId}">▶ Önizle</button>` : ''}
       <button class="btn btn--ghost btn--xs" data-action="cancel" data-tid="${ts.transferId}" data-pid="${findPeerForTransfer(ts.transferId)}">${t('ft.btn.cancel')}</button>
     </div>
   `;
@@ -556,6 +646,14 @@ function renderTransferCard(ts: TransferState) {
       if (action === 'pause')  pt.pauseTransfer(tid);
       if (action === 'resume') pt.resumeTransfer(tid);
       if (action === 'cancel') { pt.cancelTransfer(tid); renderTransfers(); }
+      if (action === 'preview') {
+        const tState = pt.getTransfer(tid);
+        if (!tState) return;
+        const file = state.files.get(tState.fileId);
+        if (!file) return;
+        openMediaModal(tid, tState.fileName, file.mimeType);
+        return;
+      }
     });
   });
 }

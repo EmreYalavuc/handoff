@@ -1651,6 +1651,20 @@ body {
   word-break: break-all;
 }
 
+/* ── Media preview modal ─────────────────────────────────────────────────────── */
+.ft-media-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+.ft-media-modal[hidden] { display: none; }
+.ft-media-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.75); }
+.ft-media-modal-box { position: relative; z-index: 1; background: var(--bg-1); border: 1px solid var(--border); border-radius: 10px; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; min-width: 320px; }
+.ft-media-modal-header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+.ft-media-modal-name { flex: 1; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-primary); }
+.ft-media-modal-pct { font-size: 12px; color: var(--accent); min-width: 36px; text-align: right; }
+.ft-media-modal-body { overflow: auto; display: flex; align-items: center; justify-content: center; padding: 16px; min-height: 120px; }
+.ft-media-modal-msg { font-size: 13px; color: var(--text-muted); text-align: center; }
+.ft-media-img { max-width: 100%; max-height: 70vh; border-radius: 6px; display: block; }
+.ft-media-video { max-width: min(80vw, 900px); max-height: 70vh; border-radius: 6px; display: block; }
+.ft-media-audio { width: 340px; max-width: 80vw; }
+
 /* ========================
    FILE TRANSFER ROOM — 1.45× TEXT SCALE (desktop only)
    ======================== */

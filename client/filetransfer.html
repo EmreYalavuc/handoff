@@ -153,6 +153,20 @@
   <input type="file" id="ft-file-input" multiple hidden accept="*/*" />
   <input type="file" id="ft-folder-input" multiple hidden accept="*/*" />
 
+  <!-- Media preview modal -->
+  <div id="ft-media-modal" class="ft-media-modal" hidden>
+    <div class="ft-media-modal-backdrop" id="ft-media-modal-backdrop"></div>
+    <div class="ft-media-modal-box">
+      <div class="ft-media-modal-header">
+        <span id="ft-media-modal-name" class="ft-media-modal-name"></span>
+        <span id="ft-media-modal-pct" class="ft-media-modal-pct"></span>
+        <button id="ft-media-modal-refresh" class="btn btn--ghost btn--xs" title="Güncelle">↻</button>
+        <button id="ft-media-modal-close" class="btn btn--ghost btn--xs">✕</button>
+      </div>
+      <div id="ft-media-modal-body" class="ft-media-modal-body"></div>
+    </div>
+  </div>
+
   <script type="module" src="/src/pages/filetransfer.ts"></script>
 </body>
 </html>

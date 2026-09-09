@@ -192,6 +192,19 @@ export class PeerTransfer {
   getTransfer(id: string) { return this.transfers.get(id); }
   getAllTransfers() { return Array.from(this.transfers.values()); }
 
+  getPartialBlob(transferId: string, mimeType: string): Blob | null {
+    const st = this.transfers.get(transferId);
+    if (!st || !st.chunks || st.receivedChunks === 0) return null;
+    const parts: ArrayBuffer[] = [];
+    for (let i = 0; i < st.receivedChunks; i++) {
+      const c = st.chunks[i];
+      if (!c) break;
+      parts.push(c.buffer as ArrayBuffer);
+    }
+    if (parts.length === 0) return null;
+    return new Blob(parts, { type: mimeType });
+  }
+
   close() {
     for (const sender of this.senders.values()) sender.cancel();
     this.pc.close();
